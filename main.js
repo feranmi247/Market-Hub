@@ -778,3 +778,17 @@ document.getElementById("coExpiry").addEventListener("input", function (e) {
 document.getElementById("coCvv").addEventListener("input", function (e) {
     e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4);
 });
+// ==================== BACK TO TOP ====================
+const backToTop = document.getElementById("backToTop");
+
+window.addEventListener("scroll", function () {
+    if (window.scrollY > 500) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+});
+
+backToTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
