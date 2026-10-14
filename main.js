@@ -1,7 +1,7 @@
-// ==================== PRODUCTS ====================
+  // ==================== PRODUCTS ====================
 const PRODUCTS = [
     {
-        id: "sneakers-001",
+        id: "sneakers-001", 
         name: "Sky Blue Sneakers",
         category: "fashion",
         price: 50000,
@@ -792,3 +792,15 @@ window.addEventListener("scroll", function () {
 backToTop.addEventListener("click", function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
+// ==================== PWA SERVICE WORKER ====================
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+        navigator.serviceWorker.register("./sw.js")
+            .then(reg => {
+                console.log("Service Worker registered ✓", reg.scope);
+            })
+            .catch(err => {
+                console.warn("Service Worker registration failed:", err);
+            });
+    });
+}
