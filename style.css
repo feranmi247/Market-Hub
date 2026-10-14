@@ -572,7 +572,7 @@ button { font-family: inherit; cursor: pointer; }
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    background: white;
+   background: var(--card);
     padding: 0.9rem;
     border-radius: 10px;
     margin-bottom: 0.6rem;
@@ -1796,4 +1796,8 @@ section[id] {
     border-color: var(--primary);
     transform: rotate(20deg) scale(1.05);
     background: var(--primary-light);
+}
+.footer {
+    background: linear-gradient(180deg, #111827, #0b1220);
+    ...
 }
