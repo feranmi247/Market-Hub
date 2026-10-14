@@ -324,11 +324,13 @@ function updateLoadMoreUI(total, shown) {
 // Products grid (event delegation)
 productsGrid.addEventListener("click", function (e) {
     const addBtn = e.target.closest(".add-to-cart");
-    if (addBtn) {
+if (addBtn) {
+    withLoading(addBtn, LOADING_MS, () => {
         addToCart(addBtn.dataset.id);
         cartOverlay.classList.add("show");
-        return;
-    }
+    });
+    return;
+}
 
     const favBtn = e.target.closest(".favourite-button");
     if (favBtn) {
@@ -496,7 +498,8 @@ modalQtyPlus.addEventListener("click", function () {
 // Add to cart from modal
 modalAddBtn.addEventListener("click", function () {
     if (!currentModalProduct) return;
-
+withLoading(modalAddBtn, LOADING_MS, () => {
+        const existing = cart.find(item => item.id === currentModalProduct.id);
     const existing = cart.find(item => item.id === currentModalProduct.id);
     if (existing) {
         existing.quantity += currentModalQty;
@@ -545,12 +548,14 @@ loadMoreBtn.addEventListener("click", function () {
 // ==================== WISHLIST GRID CLICK ====================
 if (wishlistGrid) {
     wishlistGrid.addEventListener("click", function (e) {
-        const addBtn = e.target.closest(".add-to-cart");
-        if (addBtn) {
-            addToCart(addBtn.dataset.id);
-            cartOverlay.classList.add("show");
-            return;
-        }
+       const addBtn = e.target.closest(".add-to-cart");
+if (addBtn) {
+    withLoading(addBtn, LOADING_MS, () => {
+        addToCart(addBtn.dataset.id);
+        cartOverlay.classList.add("show");
+    });
+    return;
+}
 
         const favBtn = e.target.closest(".favourite-button");
         if (favBtn) {
@@ -708,14 +713,15 @@ checkoutNext.addEventListener("click", function () {
         }
         goToStep(currentStep + 1);
     } else if (currentStep === 3) {
-        // Final step — validate then submit
-        if (!validateStep(3)) {
-            showToast("Please check your payment details");
-            return;
-        }
-        submitOrder();
+    // Final step — validate then submit
+    if (!validateStep(3)) {
+        showToast("Please check your payment details");
+        return;
     }
-});
+    withLoading(checkoutNext, 900, () => {
+        submitOrder();
+    });
+}
 
 // Back button
 checkoutBack.addEventListener("click", function () {
@@ -844,3 +850,22 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", fun
         applyTheme(e.matches ? "dark" : "light");
     }
 });
+// ==================== BUTTON LOADING HELPER ====================
+// Shows a spinner on a button for `duration` ms, then restores it.
+function withLoading(button, duration, callback) {
+    if (!button || button.classList.contains("btn-loading")) return;
+
+    const originalText = button.textContent;
+    button.classList.add("btn-loading");
+    button.disabled = true;
+
+    setTimeout(() => {
+        button.classList.remove("btn-loading");
+        button.disabled = false;
+        button.textContent = originalText;
+        if (typeof callback === "function") callback();
+    }, duration);
+}
+
+// Simulate a short "processing" delay for realism
+const LOADING_MS = 600;
