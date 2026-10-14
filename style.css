@@ -23,6 +23,20 @@
     --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
     --radius: 14px;
 }
+    [data-theme="dark"] {
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: rgba(59, 130, 246, 0.15);
+    --accent: #facc15;
+    --text: #f3f4f6;
+    --text-muted: #9ca3af;
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.6);
+}
 
 html { scroll-behavior: smooth; }
 
@@ -36,7 +50,17 @@ body {
 body {
     animation: pageFade 0.4s ease;
 }
-
+body,
+.header,
+.product-card,
+.cart,
+.modal,
+.checkout-modal,
+input,
+select,
+textarea {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
 @keyframes pageFade {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -55,7 +79,7 @@ button { font-family: inherit; cursor: pointer; }
     top: 0;
     z-index: 50;
     padding: 0.9rem 1.5rem;
-    background: rgba(255, 255, 255, 0.85);
+    background: color-mix(in srgb, var(--card) 85%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
@@ -236,7 +260,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .search-box {
-    background: white;
+    background: var(--card);
     padding: 0.5rem;
     border-radius: 999px;
     box-shadow: var(--shadow-lg);
@@ -493,7 +517,7 @@ button { font-family: inherit; cursor: pointer; }
 .cart {
     width: 420px;
     max-width: 100%;
-    background: var(--bg);
+   background: var(--card);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -509,7 +533,7 @@ button { font-family: inherit; cursor: pointer; }
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem 1.4rem;
-    background: white;
+    background: var(--card);
     border-bottom: 1px solid var(--border);
 }
 
@@ -646,7 +670,7 @@ button { font-family: inherit; cursor: pointer; }
 
 .cart-footer {
     padding: 1rem 1.4rem;
-    background: white;
+    background: var(--card);
     border-top: 1px solid var(--border);
 }
 
@@ -757,7 +781,7 @@ button { font-family: inherit; cursor: pointer; }
 .sell-form {
     max-width: 720px;
     margin: 0 auto;
-    background: white;
+    background: var(--card);
     padding: 2rem;
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
@@ -865,7 +889,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .modal {
-    background: white;
+    background: var(--card);
     border-radius: var(--radius);
     max-width: 900px;
     width: 100%;
@@ -1134,7 +1158,7 @@ button { font-family: inherit; cursor: pointer; }
 /* ==================== ABOUT SECTION ==================== */
 .about-section {
     padding: 3rem 1.5rem 4rem;
-    background: white;
+    background: var(--card);
 }
 
 .about-mission {
@@ -1392,7 +1416,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .checkout-modal {
-    background: white;
+    background: var(--card);
     border-radius: var(--radius);
     width: 100%;
     max-width: 520px;
@@ -1752,4 +1776,24 @@ section[id] {
     background: var(--primary-dark);
     transform: translateY(-3px);
     box-shadow: 0 12px 26px rgba(37, 99, 235, 0.5);
+}
+/* ==================== THEME TOGGLE BUTTON ==================== */
+.theme-toggle {
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.25s ease;
+    color: var(--text);
+}
+
+.theme-toggle:hover {
+    border-color: var(--primary);
+    transform: rotate(20deg) scale(1.05);
+    background: var(--primary-light);
 }
