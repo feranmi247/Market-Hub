@@ -804,3 +804,43 @@ if ("serviceWorker" in navigator) {
             });
     });
 }
+// ==================== THEME TOGGLE ====================
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+// Determine starting theme:
+// 1) Saved preference, OR
+// 2) OS preference if no saved preference
+function getInitialTheme() {
+    const saved = localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") return saved;
+
+    // Fall back to OS preference
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+    }
+    return "light";
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    themeIcon.textContent = theme === "dark" ? "☀️" : "🌙";
+    localStorage.setItem("theme", theme);
+}
+
+// Init on page load
+applyTheme(getInitialTheme());
+
+// Toggle on click
+themeToggle.addEventListener("click", function () {
+    const current = document.documentElement.getAttribute("data-theme");
+    applyTheme(current === "dark" ? "light" : "dark");
+});
+
+// Follow OS changes live (if user hasn't set a preference)
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
+    // Only auto-switch if user hasn't chosen manually
+    if (!localStorage.getItem("theme")) {
+        applyTheme(e.matches ? "dark" : "light");
+    }
+});
