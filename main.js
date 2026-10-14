@@ -499,7 +499,7 @@ modalQtyPlus.addEventListener("click", function () {
 modalAddBtn.addEventListener("click", function () {
     if (!currentModalProduct) return;
 withLoading(modalAddBtn, LOADING_MS, () => {
-        const existing = cart.find(item => item.id === currentModalProduct.id);
+    
     const existing = cart.find(item => item.id === currentModalProduct.id);
     if (existing) {
         existing.quantity += currentModalQty;
