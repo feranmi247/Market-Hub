@@ -729,11 +729,57 @@ checkoutBack.addEventListener("click", function () {
 });
 
 // Submit order
-function submitOrder() {
-    // Capture details before clearing
+async function submitOrder() {
+    // Capture details
     const name = document.getElementById("coName").value.trim();
     const email = document.getElementById("coEmail").value.trim();
-    const orderNum = generateOrderNumber();
+    const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    try {
+        // 1. Send the request to your new Vercel backend
+        const response = await fetch('https://market-hub-api.vercel.app/api/initialize-payment', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({ 
+                email: email, 
+                amount: total 
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!data.access_code) {
+            throw new Error(data.error || "Payment initialization failed");
+        }
+
+        // 2. Open the Paystack Popup
+        const popup = new PaystackPop();
+        popup.resumeTransaction(data.access_code, {
+            onSuccess: (transaction) => {
+                // Payment was successful!
+                document.getElementById("successName").textContent = name || "friend";
+                document.getElementById("successEmail").textContent = email || "your email";
+                document.getElementById("orderNumber").textContent = transaction.reference;
+
+                goToStep(4); // Show the success screen
+                
+                // Clear the cart
+                cart = [];
+                saveCart();
+                updateCartUI();
+            },
+            onCancel: () => {
+                showToast("Payment cancelled");
+            }
+        });
+
+    } catch (error) {
+        console.error("Payment error:", error);
+        showToast("Could not connect to payment gateway.");
+    }
+}
 
     // Fill success screen
     document.getElementById("successName").textContent = name || "friend";
