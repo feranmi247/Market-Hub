@@ -183,7 +183,9 @@ function renderWishlist() {
 }
 // ==================== CART ====================
 function addToCart(productId) {
-    const product = PRODUCTS.find(p => p.id === productId);
+    const product = [...PRODUCTS, ...userProducts]
+        .find(p => p.id === productId);
+
     if (!product) return;
 
     const existing = cart.find(item => item.id === productId);
@@ -722,7 +724,7 @@ checkoutNext.addEventListener("click", function () {
         submitOrder();
     });
 }
-
+});
 // Back button
 checkoutBack.addEventListener("click", function () {
     if (currentStep > 1) goToStep(currentStep - 1);
@@ -780,21 +782,6 @@ async function submitOrder() {
         showToast("Could not connect to payment gateway.");
     }
 }
-
-    // Fill success screen
-    document.getElementById("successName").textContent = name || "friend";
-    document.getElementById("successEmail").textContent = email || "your email";
-    document.getElementById("orderNumber").textContent = orderNum;
-
-    // Advance to success step
-    goToStep(4);
-
-    // Clear the cart
-    cart = [];
-    saveCart();
-    updateCartUI();
-}
-
 // Close actions
 checkoutClose.addEventListener("click", closeCheckout);
 checkoutOverlay.addEventListener("click", function (e) {
